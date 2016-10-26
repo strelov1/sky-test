@@ -2,52 +2,70 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+use kartik\daterange\DateRangePicker;
+use kartik\form\ActiveForm;
+use yii\bootstrap\Html;
+
+$this->title = 'Статистика пользователей';
 ?>
 <div class="site-index">
-
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
     <div class="body-content">
-
+        <?php $form = ActiveForm::begin(); ?>
         <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+            <div class="col-xs-6">
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+                <?= DateRangePicker::widget([
+                    'model' => $model,
+                    'name' => 'date_range',
+                    'value' => $model->date_range,
+                    'convertFormat' => true,
+                    'language'=>'ru',
+                    'pluginOptions' => [
+                        'locale' => ['format' => 'm-d-Y H:i:s'],
+                    ]
+                ]); ?>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <?= Html::submitButton('Получить данные', ['class' => 'btn btn-success']) ?>
+                </div>
             </div>
         </div>
 
+        <?php ActiveForm::end(); ?>
+
+        <canvas id="myBarChart"></canvas>
+
     </div>
 </div>
+<script>
+    var randomColorFactor = function () {
+        return Math.round(Math.random() * 255);
+    };
+    var randomColor = function () {
+        return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',.8)';
+    };
+    var data = {
+        labels: <?= json_encode($data['label']) ?>,
+        datasets: [
+            {
+                label: "Конверсия по дням",
+                backgroundColor: [
+                    <?php foreach ($data['label'] as $time_add) : ?>
+                    randomColor(),
+                    <?php endforeach; ?>
+                ],
+                hoverBorderColor: "rgba(255,99,132,1)",
+                borderWidth: 1,
+                data: <?= json_encode($data['percent']) ?>,
+            }
+        ]
+    };
+
+    var ctx = $("#myBarChart");
+    var myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+    });
+</script>
+

@@ -21,6 +21,10 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
+        '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.3/Chart.min.js'
+    ];
+    public $jsOptions = [
+        'position' => \yii\web\View::POS_HEAD
     ];
     public $depends = [
         'yii\web\YiiAsset',
