@@ -94,7 +94,7 @@ views/site/index.php
 Для наполнение базы данными нужно сгенерировать фикитуры (или загрузить SQL дамп customers.sql)
 
 ~~~
-php yii fixture/generate --count=10000 --language="ru_RU"
+php yii fixture/generate сustomers --count=10000 --language="ru_RU"
 php yii fixture/load Customers
 ~~~
 
