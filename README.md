@@ -4,11 +4,12 @@
 на втором месте после максимальной.
 
 ```sql
-SELECT student_id
+SELECT
+  payments.student_id
 FROM payments
 GROUP BY student_id
-ORDER BY sum(amount)
-LIMIT 1
+ORDER BY sum(payments.amount) DESC
+LIMIT 1, 1;
 ```
 
 Необходимо показать имена и фамилии всех студентов,
@@ -17,24 +18,24 @@ LIMIT 1
 
 ```sql
 SELECT
-  st.name,
-  st.surname
-FROM
-  (SELECT
-     student.id,
-     student.name,
-     student.surname,
-     student.gender
-   FROM student) st,
-  (SELECT
-     student_status.student_id,
-     student_status.status
-   FROM student_status
-   ORDER BY student_status.datetime DESC
-   LIMIT 1) ss
-WHERE st.id = ss.student_id
-      AND st.gender = 'unknown'
-      AND ss.status = 'vacation';
+  name,
+  surname
+FROM student
+  JOIN (
+         SELECT
+           status.student_id,
+           status.status
+         FROM (
+                SELECT
+                  ss.student_id,
+                  ss.status
+                FROM student_status AS ss
+                ORDER BY datetime DESC
+              ) status
+         GROUP BY status.student_id
+       ) status ON student.id = status.student_id
+WHERE gender = 'unknown'
+AND status = 'vacation';
 ```
 
 Используя три предыдущие таблицы, найти имена и фамилии всех студентов,
@@ -43,29 +44,29 @@ WHERE st.id = ss.student_id
 
 ```sql
 SELECT
-  st.name,
-  st.surname
-FROM
-  (SELECT
-     student.id,
-     student.name,
-     student.surname
-   FROM student
-   WHERE id IN (
-     SELECT student_id
-     FROM payments
-     WHERE amount > 0
-     GROUP BY student_id
-     HAVING COUNT(student_id) > 1
-   )) st,
-  (SELECT
-     student_status.student_id,
-     student_status.status
-   FROM student_status
-   ORDER BY student_status.datetime DESC
-   LIMIT 1) ss
-WHERE st.id = ss.student_id
-      AND ss.status = 'lost'
+  name,
+  surname
+FROM student
+  JOIN (
+         SELECT
+           status.student_id,
+           status.status
+         FROM (
+                SELECT
+                  student_status.student_id,
+                  student_status.status
+                FROM student_status
+                ORDER BY datetime DESC
+              ) status
+         GROUP BY status.student_id
+       ) status ON student.id = status.student_id
+WHERE status = 'lost'
+AND id IN (
+  SELECT student_id FROM payments
+  WHERE amount > 0
+  GROUP BY student_id
+  HAVING COUNT(amount) < 3
+);
 ```
 
 ###Приложения статистики
