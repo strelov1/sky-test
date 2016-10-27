@@ -15,17 +15,17 @@ php php yii fixture/load Customers
 
 Необходимо составить запрос, который находит пользователя, сумма платежей которого находится 
 на втором месте после максимальной.
-~~~
+```sql
 SELECT student_id
 FROM payments
 GROUP BY student_id
 ORDER BY sum(amount)
 LIMIT 1
-~~~
+```
 
 Необходимо показать имена и фамилии всех студентов, чей пол до сих не известен (gender = 'unknown') 
 и они сейчас находятся на каникулах (status = ‘vacation’).
-~~~
+```sql
 SELECT
   st.name,
   st.surname
@@ -45,12 +45,12 @@ FROM
 WHERE st.id = ss.student_id
       AND st.gender = 'unknown'
       AND ss.status = 'vacation';
-~~~
+```
 
 Используя три предыдущие таблицы, найти имена и фамилии всех студентов, которые заплатили не больше трех раз и перестали
 учиться (status = ‘lost’). Нулевые платежи (amount = 0) не учитывать.
 
-~~~
+```sql
 SELECT
   st.name,
   st.surname
@@ -75,4 +75,4 @@ FROM
    LIMIT 1) ss
 WHERE st.id = ss.student_id
       AND ss.status = 'lost'
-~~~
+```
