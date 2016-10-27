@@ -70,22 +70,22 @@ WHERE st.id = ss.student_id
 
 ###Приложения статистики
 
-Демо
+[Демо](http://sky-test.raketa.guru/)
 ~~~
 http://sky-test.raketa.guru/
 ~~~
 
-Контроллер
+[Контроллер](https://github.com/strelov1/sky-test/blob/master/controllers/SiteController.php)
 ~~~
 controllers/SiteController.php
 ~~~
 
-Модель
+[Модель](https://github.com/strelov1/sky-test/blob/master/models/Customers.php)
 ~~~
 models/Customers.php
 ~~~
 
-Отображение
+[Отображение](https://github.com/strelov1/sky-test/blob/master/views/site/index.php)
 ~~~
 views/site/index.php
 ~~~
@@ -104,12 +104,12 @@ php yii fixture/load Customers
 php yii test-logs
 ~~~
 
-Тест
+[Тест](https://github.com/strelov1/sky-test/blob/master/commands/TestLogsController.php)
 ~~~
 commands/TestLogsController.php
 ~~~
 
-Логер
+[Логер](https://github.com/strelov1/sky-test/blob/master/commands/Logs.php)
 ~~~
 commands/Logs.php
 ~~~
